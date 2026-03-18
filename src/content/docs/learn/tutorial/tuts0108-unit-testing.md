@@ -62,4 +62,4 @@ You can run your tests directly from RStudio using the **"Test"** button in the 
 devtools::test()
 ```
 
-**Next Step:** Once your analysis is tested and robust, let's learn how to [distribute your module](/tutorial/tuts0109-distributing-modules) so others can use it.
+**Next Step:** Once your analysis is tested and robust, check out some **[Additional Notes](/tutorial/tuts0110-additional-notes)** on advanced module development.

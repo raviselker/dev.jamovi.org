@@ -18,6 +18,13 @@ Layout controls are used to control the layout child controls in the UI. Option 
 
 As already seen earlier in this tutorial series, different option controls are 'bound' to different analysis options. The name of the option control typically needs to match the name of the option it is bound to. Changing the option control leads to changes to the underlying option, resulting in changes to the analysis.
 
+> [!TIP]
+> **Choose the Right Control for the Job**
+> - Use **CheckBoxes** for binary "on/off" settings.
+> - Use **RadioButtons** when there are 2-4 mutually exclusive options.
+> - Use **ComboBoxes** (dropdowns) when there are 5 or more options, or to save vertical space.
+> - Use **TextBoxes** with `format: number` to ensure users only enter valid numeric data.
+
 Not all controls can be bound to *any* option. It wouldn't be meaningful to bind a checkbox to a `List` option for example. The following lists the different option types, and the control types that can be bound to each:
 
 ### `Bool`
@@ -278,3 +285,5 @@ Use multiple CheckBox's linked to the different sub-options.
 ```
 
 This is jamovi's most complicated control. The setup of it's UI definition depends heavily on the way the option is setup. A more detailed explanation can be found [here](/ui/listbox).
+
+**Next Step:** Learn how to add complex logic to your UI with **[Advanced Customisation](/ui/advanced-customisation)**.

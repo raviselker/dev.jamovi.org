@@ -137,6 +137,6 @@ When using `setState()` and `state`, an analysis will typically try and retrieve
 length(serialize(object), connection=NULL)
 ```
 
-**Next Step:** Now that you've mastered advanced state management, let's learn how to [verify your results with automated tests](/tutorial/tuts0108-unit-testing).
+**Next Step:** Now that you've mastered state management, let's explore **[Plotting](/tutorial/tuts0301-image-state-performance)** in jamovi.
 
 

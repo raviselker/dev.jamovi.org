@@ -150,4 +150,6 @@ You should have something like the following:
 
 ![Jamovi screenshot](../../../../assets/tuts0201-dynamic-tables-final.png)
 
+**Next Step:** YAML data-binding is powerful, but sometimes you need more control. Let's explore [Advanced Table Techniques](/tutorial/tuts0201a-advanced-table-techniques).
+
 

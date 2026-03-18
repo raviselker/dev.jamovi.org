@@ -207,3 +207,7 @@ module.exports = {
     }
 }
 ```
+
+---
+
+**Next Track:** Explore the detailed specifications for every control and results element in the **[Technical Reference](/api/module-definition)**.

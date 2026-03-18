@@ -8,9 +8,24 @@ UIs for jamovi analyses are defined in the .u.yaml file (A refresher on the file
 
 ### `aggressive` vs `tame` compiler mode
 
-By default, .u.yaml files are in `aggressive` compiler mode. This means when installing jamovi modules with `jmvtools::install()` the .u.yaml files are regenerated and replaced each time. This is good early on in the development process, but as development progresses, getting a UI *just right* or adding custom behaviour requires hand editing of the .u.yaml files. To prevent jmvtools from simply replacing all your changes, the .u.yaml file can be placed in `tame` mode. In `tame` mode the compiler respects your changes, and will not interfere with your adjustments. The trade-off is that the compiler often can't insert new controls into the UI as optimally.
+When you first create an analysis, jamovi manages the `.u.yaml` file for you. This behavior is controlled by the `compilerMode` property:
 
-To begin with we'd encourage you to leave your .u.yaml files in `aggressive` mode.
+- **`aggressive` (Default):** Think of this as "Auto-Pilot." Every time you run `jmvtools::install()`, jamovi completely regenerates the UI file based on your `a.yaml` options. This is perfect when you are still adding or removing options, as it ensures the UI always matches your code. **Note:** Any manual changes you make to the `.u.yaml` will be overwritten in this mode.
+- **`tame`:** Think of this as "Manual Control." Once you start fine-tuning the layout (e.g., grouping checkboxes, adding custom labels, or adjusting margins), you should switch to `tame` mode. In this mode, `jmvtools` will respect your manual edits and only add new options if it can find a safe place for them.
+
+> [!TIP]
+> **Start Aggressive, Stay Tame.** 
+> Use `aggressive` mode while you are defining your analysis's core features. Switch to `tame` only when you are ready to "polish" the visual layout.
+
+### UI Best Practices Checklist
+
+To ensure your analysis feels like a native part of jamovi, follow these design principles:
+
+- [ ] **Group Related Options:** Use `LayoutBox` or `CollapseBox` to group related checkboxes (e.g., "Assumption Checks" or "Additional Statistics").
+- [ ] **Use Standard Margins:** Apply `margin: large` to top-level `LayoutBox` elements to give the UI room to breathe.
+- [ ] **Order by Importance:** Place the most critical inputs (like variable selection) at the top.
+- [ ] **Label Clearly:** Use sentence case for labels (e.g., "Equal variances assumed" instead of "Equal Variances Assumed").
+- [ ] **Avoid Clutter:** If an analysis has many advanced options, hide them inside a `CollapseBox` that is closed by default.
 
 ### Controls
 
@@ -77,3 +92,5 @@ To add a heading or a custom label to a group of controls, you can use a `Label`
 For more advanced layouts, you can use the `cell` property on child controls to place them in a specific grid position within a `LayoutBox`.
 
 See the [LayoutBox](/ui/layoutbox) and [CollapseBox](/ui/collapsebox) documentation for more details.
+
+**Next Step:** Take your UI further with **[Advanced UI Design](/ui/advanced-design)**.
