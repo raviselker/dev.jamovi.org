@@ -1,14 +1,14 @@
 ---
 layout: ../layouts/BaseLayout.astro
 title: "Debugging an Analysis"
-description: "Learn how to use guard clauses for a clean UI and enable Dev Mode for advanced R stack traces."
+description: "Learn how to use input checks for a clean UI and enable Dev Mode for advanced R stack traces."
 ---
 
 Even the best-written analyses encounter errors. In this section, we'll cover two essential debugging skills:
-1.  **Guard Clauses:** Preventing errors when the user hasn't finished setting up the analysis.
+1.  **Input Checks (Early Returns):** Preventing errors when the user hasn't finished setting up the analysis.
 2.  **Dev Mode:** Accessing advanced stack traces to troubleshoot R logic errors.
 
-## 1. Using Guard Clauses
+## 1. Using Input Checks
 
 By default, jamovi tries to run your analysis as soon as it's selected. If the user hasn't provided the required inputs yet, R might throw a confusing error message.
 
@@ -17,10 +17,10 @@ Try removing both `len` and `supp` from your analysis in jamovi.
 
 ![Removing variables](../../../../assets/tuts0106-debugging-an-analysis-move-vars.png)
 
-You will see an error message (like `length 0`) in the results panel. This isn't a "bug"—it's just that the analysis is trying to run without data.
+You will see an error message (like `length 0`) in the results panel. This isn't a "bug"—it's just that the analysis is trying to run without data. This creates a "flickering" or laggy feel for the user.
 
 ### The Solution: Exit Early
-We can add a **Guard Clause** to the top of our `.run()` function. This tells R: "If the required options are empty, stop here and don't show an error."
+We can add an **Input Check** (also known as an Early Return) to the top of our `.run()` function. This tells R: "If the required options are empty, stop here and don't show an error."
 
 Modify your `R/ttest.b.R`:
 
@@ -31,7 +31,7 @@ ttestClass <- R6::R6Class(
     private = list(
         .run = function() {
 
-            # 1. Guard Clause: Stop if inputs are missing
+            # 1. Input Check: Stop if inputs are missing
             if (length(self$options$dep) == 0 || length(self$options$group) == 0) {
                 return()
             }
@@ -54,7 +54,7 @@ ttestClass <- R6::R6Class(
 )
 ```
 
-Now, the results panel will remain clean until all variables are assigned.
+Now, the results panel will remain clean until all variables are assigned, providing a much smoother user experience.
 
 ## 2. Enabling "Dev Mode"
 
