@@ -86,7 +86,7 @@ properties:
  - width
  - height
  - renderFun
- - requiresData
+ - [requiresData](/api/requires-data)
 
 ### Group
 
