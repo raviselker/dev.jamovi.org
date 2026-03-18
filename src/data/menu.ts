@@ -11,19 +11,36 @@ export const menu = [
       { text: '5 - Creating Rich Results', href: '/tutorial/tuts0105-creating-rich-results' },
       { text: '6 - Debugging an Analysis', href: '/tutorial/tuts0106-debugging-an-analysis' },
       { text: '7 - Adding Plots', href: '/tutorial/tuts0107-adding-plots' },
-      { text: '8 - Distributing Modules', href: '/tutorial/tuts0109-distributing-modules' },
-      { text: '9 - Additional Notes', href: '/tutorial/tuts0110-additional-notes' },
-      { text: '10 - Summary & Next Steps', href: '/tutorial/tuts0111-summary' },
     ]
   },
   {
     section: 'learn',
     category: 'Intermediate',
     items: [
-      { text: '1 - Dynamic Tables', href: '/tutorial/tuts0201-dynamic-tables' },
-      { text: '2 - Handling Data', href: '/tutorial/tuts0202-handling-data' },
-      { text: '3 - State', href: '/tutorial/tuts0203-state' },
-      { text: '4 - Unit Testing your Analysis', href: '/tutorial/tuts0108-unit-testing' },
+      { text: '1 - The Analysis Lifecycle', href: '/tutorial/tuts0200-analysis-lifecycle' },
+      { text: '2 - Dynamic Tables', href: '/tutorial/tuts0201-dynamic-tables' },
+      { text: '3 - Advanced Table Techniques', href: '/tutorial/tuts0201a-advanced-table-techniques' },
+      { text: '4 - Handling Data', href: '/tutorial/tuts0202-handling-data' },
+      { text: '5 - State', href: '/tutorial/tuts0203-state' },
+    ]
+  },
+  {
+    section: 'learn',
+    category: 'Plotting',
+    items: [
+      { text: '1 - Image State Performance', href: '/tutorial/tuts0301-image-state-performance' },
+      { text: '2 - Plot Themes', href: '/tutorial/tuts0302-plot-themes' },
+      { text: '3 - Responsive Image Sizing', href: '/tutorial/tuts0303-responsive-image-sizing' },
+    ]
+  },
+  {
+    section: 'learn',
+    category: 'Advanced & Distribution',
+    items: [
+      { text: '1 - Unit Testing your Analysis', href: '/tutorial/tuts0108-unit-testing' },
+      { text: '2 - Additional Notes', href: '/tutorial/tuts0110-additional-notes' },
+      { text: '3 - Distributing Modules', href: '/tutorial/tuts0109-distributing-modules' },
+      { text: '4 - Summary & Next Steps', href: '/tutorial/tuts0111-summary' },
     ]
   },
   {
@@ -42,6 +59,7 @@ export const menu = [
       { text: 'Module Definition', href: '/api/module-definition' },
       { text: 'Analysis Definition', href: '/api/analysis-definition' },
       { text: 'Results Definition', href: '/api/results-definition' },
+      { text: 'requiresData', href: '/api/requires-data' },
       { text: 'UI Definition', href: '/api/ui-definition' },
     ]
   },
@@ -53,7 +71,6 @@ export const menu = [
       { text: 'Table', href: '/api/table' },
       { text: 'Notices', href: '/api/notices' },
       { text: 'Actions', href: '/api/actions' },
-      { text: 'Image Sizing', href: '/api/image-sizing' },
       { text: 'Module Translation', href: '/api/i18n' },
     ]
   },
