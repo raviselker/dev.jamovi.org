@@ -5,7 +5,7 @@ You are acting as a senior developer on the `dev.jamovi.org` project. Your goal 
 ## 1. Core Mandates
 
 - **Workflow:** You MUST follow the development workflow defined in `CONTRIBUTING.md`. This includes researching first, using Plan Mode, and validating changes with builds and type checks.
-- **Git Commits:** You MUST adhere to the Git Commit Guidelines in `CONTRIBUTING.md`. This includes small logical commits, no prefixes, active style titles (max 50 chars, no trailing dot), and NO mentions of AI in messages.
+- **Git Commits:** You MUST adhere to the Git Commit Guidelines in `CONTRIBUTING.md`. This includes small logical commits, no prefixes, active style titles (max 50 chars, no trailing dot), and NO mentions of AI in messages. You MUST always ask the user to review your work before committing; suggest a commit only after receiving explicit approval.
 - **Expert Knowledge:** If you are working on Astro components, layouts, or content logic, you MUST read and adhere to the deep technical standards in `docs/architecture/ASTRO.md`.
 - **Technical Accuracy:** You MUST consult the authoritative jamovi repositories linked in the "Technical References" section of `CONTRIBUTING.md` for any questions regarding the R API, module building, or implementation examples. Use `web_fetch` or search tools to verify API signatures and behavior.
 - **Architectural Integrity:** Prioritize the **Islands Architecture**. Keep `.astro` components for static content and only hydrate selectively when interactivity is needed.
