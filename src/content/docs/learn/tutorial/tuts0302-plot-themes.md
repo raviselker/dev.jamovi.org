@@ -36,8 +36,8 @@ To apply it, simply add it to your `ggplot` object:
         geom_point() +
         ggtheme # Apply the jamovi-provided theme
     
-    print(p)
-    TRUE
+    # Return the ggplot2 object
+    return(p)
 }
 ```
 
@@ -76,8 +76,8 @@ p <- ggplot(plotData, aes(x=x, y=y)) +
         scale_fill_manual(values=theme$fill) + # Use jamovi palette
         ggtheme
     
-    print(p)
-    TRUE
+    # Return the ggplot2 object
+    return(p)
 }
 ```
 

@@ -83,10 +83,13 @@ combineBelow | `false`  | if multiple adjacent cells in the column contain the s
 
 properties:
 
- - width
- - height
- - renderFun
- - [requiresData](/api/requires-data)
+ - **width**: Integer. Default: 400.
+ - **height**: Integer. Default: 300.
+ - **renderFun**: String. The name of the R function used to render the plot.
+ - **requiresData**: Boolean or Logical Expression. Determines if the `renderFun` has access to the dataset (`self$data`). 
+ 
+> [!TIP]
+> Setting `requiresData: true` is essential for **Data-Driven** plots (like scatter plots) where the plot function needs the raw dataset. For more details on performance, see the **[Image State Performance](/tutorial/tuts0301-image-state-performance)** tutorial.
 
 ### Group
 

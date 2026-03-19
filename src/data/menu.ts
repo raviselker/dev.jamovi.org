@@ -59,7 +59,6 @@ export const menu = [
       { text: 'Module Definition', href: '/api/module-definition' },
       { text: 'Analysis Definition', href: '/api/analysis-definition' },
       { text: 'Results Definition', href: '/api/results-definition' },
-      { text: 'requiresData', href: '/api/requires-data' },
       { text: 'UI Definition', href: '/api/ui-definition' },
     ]
   },

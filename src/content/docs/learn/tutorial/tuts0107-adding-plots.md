@@ -94,20 +94,17 @@ ttestClass <- R6::R6Class("ttestClass",
                 geom_errorbar(aes(ymin = sel, ymax = seu), width = 0.1) +
                 geom_point()
 
-            # ggplot2 objects must be explicitly printed to the active device
-            print(p)
-
-            # Return TRUE to notify jamovi that rendering was successful
-            TRUE
+            # Return the ggplot2 object directly
+            return(p)
         }
     )
 )
 ```
 
-### Why the extra logic?
+### Why return the plot object?
 
-*   **`print(p)`**: Unlike in an interactive R session where plots appear automatically, inside a function you must explicitly call `print()` to send the `ggplot2` object to the graphics device.
-*   **`return(TRUE)`**: This tells jamovi that the plot was rendered successfully. If you return `FALSE` (or nothing), jamovi will assume the plot is empty or failed and won't display it.
+*   **`return(p)` (Returning the Object)**: Unlike in an interactive R session where plots appear automatically, jamovi's rendering system expects your `.plot` function to return the `ggplot2` object (or a `base` R plot). jamovi then handles the printing to the appropriate graphics device.
+*   **Success/Failure**: If you return the plot object, jamovi assumes success and renders it. If you return `FALSE` (or `NULL`), jamovi will assume the plot is empty or not yet ready and won't display anything.
 
 ## 5. Test your Plot
 
