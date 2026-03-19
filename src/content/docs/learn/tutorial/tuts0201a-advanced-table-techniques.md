@@ -29,17 +29,36 @@ The simplest way. Define the columns and rows directly in your `.r.yaml`. Use `c
 ```
 
 ### 2. `.init()` (Dynamic Structure)
-Use this when the table structure depends on **User Options**, but not on the data values themselves. For example, if the user selects "Descriptives", you can add extra columns before any calculation starts.
+Use this when the table structure depends on **User Options**, but not on the data values themselves. 
+
+A perfect example is an **ANOVA table**. While the columns are fixed, the number of rows depends on how many factors the user selects and how they've defined their model (main effects, interactions, etc.). By initializing these rows in `.init()`, the table structure appears instantly, providing immediate feedback before the calculation even starts.
 
 ```r
 .init = function() {
     table <- self$results$mainTable
-    if (self$options$showDescriptives) {
-        table$addColumn(name='mean', title='Mean', type='number')
-        table$addColumn(name='sd', title='SD', type='number')
+    
+    # Get the model terms from options (e.g., list(c("A"), c("B"), c("A", "B")))
+    terms <- self$options$modelTerms
+    
+    for (term in terms) {
+        # Create a nice label like "A ✻ B" for interactions
+        label <- paste0(term, collapse = " ✻ ")
+        
+        # Add a row for each term using the term itself as a unique key
+        table$addRow(rowKey = term, values = list(
+            var = label
+        ))
     }
+    
+    # Always add a row for the Error/Residuals
+    table$addRow(rowKey = ".error", values = list(
+        var = "Residuals"
+    ))
 }
 ```
+
+> [!TIP]
+> **Why not YAML?** While you can bind rows 1-to-1 to an option in YAML (e.g., `rows: (deps)`), an ANOVA table often needs to generate rows for *combinations* of options (interactions) or add extra rows (Residuals, Total). `.init()` gives you the programmatic flexibility to build this complex structure while still maintaining a responsive UI.
 
 ### 3. `.run()` (Result-based Structure)
 Use this only when the structure depends on the **Results of the Calculation**. For example, in an Exploratory Factor Analysis where the number of columns depends on how many factors were actually extracted from the data.
