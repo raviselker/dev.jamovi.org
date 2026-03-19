@@ -1,25 +1,27 @@
 ---
 layout: ../layouts/BaseLayout.astro
 title: "Advanced Table Techniques"
-description: "Learn the three levels of table initialization and how to use Table Folding for complex results."
+description: "Master complex results using the Three Levels of Table Initialization, Grouped Results, and Table Folding."
 ---
 
-Building on the [Analysis Lifecycle](/tutorial/tuts0104a-analysis-lifecycle), this section explores how to handle tables that don't have a fixed structure.
+Building on the [Analysis Lifecycle](/tutorial/tuts0200-analysis-lifecycle), this section explores how to handle tables that don't have a fixed structure.
 
 ## The Three Levels of Table Initialization
 
 In jamovi, you can define a table's structure at three different stages, depending on how much information you have.
 
 ### 1. YAML (Static/Data-bound)
-The simplest way. **Define** the columns and rows directly in your `.r.yaml`. **Use** `columns` for fixed columns and `rows` for fixed rows. You can also **use** `clearWith` to specify which options should trigger a reset of the table.
+The simplest way. Define the columns and rows directly in your `.r.yaml`. Use `columns` for fixed columns and `rows: (deps)` for data-bound rows.
 
 ```yaml
 - name: mainTable
   type: Table
+  rows: (deps)
   columns:
     - name: var
       title: Variable
       type: text
+      content: ($key)
     - name: p
       title: p-value
       type: number
@@ -27,7 +29,7 @@ The simplest way. **Define** the columns and rows directly in your `.r.yaml`. **
 ```
 
 ### 2. `.init()` (Dynamic Structure)
-**Use** this when the table structure depends on **User Options**, but not on the data values themselves. For example, if the user selects "Descriptives", you might want to **add** extra columns.
+Use this when the table structure depends on **User Options**, but not on the data values themselves. For example, if the user selects "Descriptives", you can add extra columns before any calculation starts.
 
 ```r
 .init = function() {
@@ -39,76 +41,123 @@ The simplest way. **Define** the columns and rows directly in your `.r.yaml`. **
 }
 ```
 
-### 3. .run() (Result-based Structure)
-**Use** this only when the structure depends on the **Results of the Calculation**. For example, in an Exploratory Factor Analysis where the number of columns depends on how many factors were actually extracted from the data.
+### 3. `.run()` (Result-based Structure)
+Use this only when the structure depends on the **Results of the Calculation**. For example, in an Exploratory Factor Analysis where the number of columns depends on how many factors were actually extracted from the data.
 
 > [!CAUTION]
-> **Avoid Level 3 whenever possible.** Using `.run()` to define table structure causes a "UI Jump." Because the `.init()` phase doesn't know the structure, it creates a generic placeholder. When `.run()` finishes, the table "jumps" as columns and rows are suddenly added. This happens every time an option changes, making the UI feel unstable.
-
-**Prefer Level 1 or 2:** You **MUST** use Level 1 (YAML) or Level 2 (`.init()`) unless it is absolutely impossible to know the structure before the analysis runs. Level 1 and 2 ensure a smooth, professional-feeling UI where the table structure is visible immediately.
-
-```r
-.run = function() {
-    # Perform calculation
-    results <- stats::factanal(self$data, factors=3)
-
-    table <- self$results$mainTable
-
-    # Add columns based on the number of factors found
-    for (i in seq_len(ncol(results$loadings))) {
-        table$addColumn(
-            name=paste0('f', i), 
-            title=paste('Factor', i),
-            type='number'
-        )
-    }
-
-    # Populate the table
-    # ...
-}
-```
+> **Avoid Level 3 whenever possible.** Using `.run()` to define table structure causes a "UI Jump." Because the `.init()` phase doesn't know the structure, it creates a generic placeholder. When `.run()` finishes, the table "jumps" as columns and rows are suddenly added. Level 1 and 2 ensure a smooth, professional-feeling UI where the table structure is visible immediately.
 
 ---
 
-## Table Folding
+## Nesting Results (Groups and Arrays)
 
-Sometimes, a single logical "result" actually consists of multiple tables (e.g., a main t-test table and a table for normality tests). **Table Folding** allows you to group these together using a specific naming convention in your `.r.yaml`.
+In complex analyses, a single flat list of items is often insufficient. jamovi provides two specialized types for nesting and dynamically generating results: `Group` and `Array`.
 
-### The Bracket Convention
-By using square brackets in the `name` property, jamovi treats these items as part of a single group.
+> [!NOTE]
+> **Nesting vs. Folding:**
+> While they sound similar, they serve different purposes: **Nesting** is for organizing different objects (multiple tables/images), while **Folding** is for organizing data within a single table.
 
-- **Before the brackets:** (e.g., `ttest`) This becomes the name of the results object in your R code.
-- **Inside the brackets:** (e.g., `main`) This is the specific table within that group.
+### 1. The `Group` Type
+Use a `Group` to nest related tables or images under a shared title in the results panel.
 
 ```yaml
 # .r.yaml
 items:
-  - name: ttest[main]
-    title: Independent Samples T-Test
+  - name: mainTable
     type: Table
     ...
-  - name: ttest[assum]
-    title: Assumption Checks
-    type: Table
-    ...
+  - name: assum  # A logical group for assumption checks
+    title: Assumptions
+    type: Group
+    items:
+      - name: norm
+        title: Normality Test
+        type: Table
+      - name: eqv
+        title: Homogeneity of Variances
+        type: Table
 ```
 
-### Why use Folding?
-1.  **Logical Grouping:** In the R API, these are accessed as a single object: `self$results$ttest`.
-2.  **UI Organization:** jamovi can use this information to group results visually or when exporting to APA format.
-3.  **Clean Code:** You can iterate over the group if needed.
+In the R API, you access these nested items through the group name: `self$results$assum$norm` and `self$results$assum$eqv`.
+
+### 2. The `Array` Type
+Use an `Array` when you need to generate a dynamic list of items based on a user's selection (e.g., one Q-Q plot for every dependent variable).
+
+```yaml
+# .r.yaml
+items:
+  - name: plots
+    title: Plots
+    type: Array
+    items: (deps)  # Binds the array size to the 'deps' option
+    template:      # The template defines the structure of every item in the array
+      title: $key  # Uses the variable name as the title
+      type: Group
+      items:
+        - name: descPlot
+          type: Image
+        - name: qqPlot
+          type: Image
+```
+
+In the R API, you access array elements by their key (the variable name): `self$results$plots$get(depName)$descPlot`.
+
+---
+
+## Table Folding (Columns to Rows)
+
+**Table Folding** is a powerful feature that allows you to store results in a "flat" structure while rendering them in a "long" format (multiple rows). This is a core technique used in the `jmv` t-test to show multiple tests (Student's t, Welch's t, etc.) for each variable.
+
+### The Bracket Convention for Columns
+When you add bracketed suffixes to column names, jamovi automatically creates a "fold" for each unique bracket.
+
+```yaml
+# .r.yaml
+columns:
+  - name: var[stud]
+    title: Variable
+    type: text
+    content: ($key)
+    combineBelow: true
+  - name: name[stud]
+    title: ''
+    content: Student's t
+  - name: stat[stud]
+    title: Statistic
+    type: number
+
+  - name: var[welc]
+    title: Variable
+    type: text
+    content: ($key)
+    combineBelow: true
+  - name: name[welc]
+    title: ''
+    content: Welch's t
+  - name: stat[welc]
+    title: Statistic
+    type: number
+```
+
+### How it works
+Even though you've defined 6 columns in YAML, jamovi will render this as **3 visual columns** and **2 visual rows** for every row key.
+
+1.  **Grouping:** jamovi sees that `var[stud]` and `var[welc]` share the same base name (`var`) and treats them as the same visual column.
+2.  **Folding:** jamovi creates one visual row for the `[stud]` fold and one for the `[welc]` fold.
+3.  **Flat Storage:** In your R code, you populate the table with a single `setRow` call:
 
 ```r
-# Accessing folded tables in .b.R
-# 'ttest' comes from before the brackets, 'main' from inside them.
-mainTable <- self$results$ttest$main
-assumTable <- self$results$ttest$assum
-
-# You can also use get() if the name is dynamic
-# mainTable <- self$results$ttest$get('main')
+# Populating folded rows in .b.R
+table$setRow(rowKey="Weight", list(
+    "stat[stud]" = 2.31,
+    "stat[welc]" = 2.28
+))
 ```
 
+### Combining with `combineBelow`
+By setting `combineBelow: true` on the `var` columns, the variable name is only shown once and merged across all folds, creating a clean, professional "grouped" look.
+
 > [!TIP]
-> Table folding is particularly powerful when combined with `visible` options. You can have a whole suite of "Assumption" tables that only appear when a single "Check Assumptions" checkbox is ticked.
+> This technique is extremely dynamic. If you bind the `visible` property of all `[welc]` columns to a "Welch's t" checkbox, the second row for each variable will simply vanish or reappear as the user toggles the option, without any complex logic in your `.run()` function.
 
 **Next Step:** Now that you've mastered tables, let's look at [Handling Data](/tutorial/tuts0202-handling-data) more efficiently.
