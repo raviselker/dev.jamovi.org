@@ -62,7 +62,7 @@ These five new files each play a distinct role. While it may seem like a lot, th
 | :--- | :--- | :--- |
 | `ttest.a.yaml` | **Analysis Definition** | Contains all the meta information about the analysis: describes the options that the analysis uses, so they can be presented in the UI. |
 | `ttest.r.yaml` | **Results Definition** | Contains all the information about how the results are displayed (tables, plots, etc.). |
-| `ttest.u.yaml` | **UI Definition** | Describes how the analysis options should be presented to the user; i.e. checkboxes, list boxes, etc. (For beginniners, this is automatically generated from the `.a.yaml` file.) |
+| `ttest.u.yaml` | **UI Definition** | Describes how the analysis options should be presented to the user; i.e. checkboxes, list boxes, etc. (For beginners, this is automatically generated from the `.a.yaml` file.) |
 | `ttest.h.R` | **Header** | Automatically generated from the `.a.yaml` and `.r.yaml` files. Makes writing your analysis much easier. You don't need to look at this file, and you should **never** edit it. |
 | `ttest.b.R` | **Analysis Implementation** | Where you'll write your R code. You'll spend most of your time here when developing a jamovi analysis. |
 
